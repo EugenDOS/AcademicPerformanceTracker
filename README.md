@@ -20,17 +20,16 @@
 
 ```powershell
 .\venv\Scripts\pip.exe install -r requirements.txt
+psql -U postgres -f sql/init_postgres.sql
 
-$env:POSTGRES_DB="academic_performance_tracker"
-$env:POSTGRES_USER="postgres"
-$env:POSTGRES_PASSWORD="postgres"
-$env:POSTGRES_HOST="localhost"
-$env:POSTGRES_PORT="5432"
+Copy-Item .env.example .env
 
 .\venv\Scripts\python.exe manage.py migrate
 .\venv\Scripts\python.exe manage.py seed_demo
 .\venv\Scripts\python.exe manage.py runserver
 ```
+
+Скрипт `sql/init_postgres.sql` создает пользователя, базу данных и права доступа. Файл `.env` автоматически читается настройками Django. Таблицы проекта создаются миграциями Django, поэтому после SQL-скрипта обязательно выполняется `manage.py migrate`.
 
 ## Быстрая локальная проверка без PostgreSQL
 
@@ -95,3 +94,28 @@ $env:USE_SQLITE="1"
 $env:USE_SQLITE="1"
 .\venv\Scripts\python.exe manage.py spectacular --file schema.yaml --validate
 ```
+
+## Тестирование
+
+Все тесты лежат в `performance/tests.py`.
+
+```powershell
+$env:USE_SQLITE="1"
+.\venv\Scripts\python.exe manage.py test
+```
+
+Покрываются основные сервисные контуры проекта:
+
+- ролевой доступ администратора, преподавателя и студента;
+- запрет неавторизованного доступа к API;
+- создание и изменение оценок, занятий и посещаемости;
+- запреты на работу с чужими объектами преподавателя;
+- профиль пользователя и смена пароля;
+- уведомления и отметка прочтения;
+- аналитика и определение студентов, которым нужно внимание;
+- CSV-экспорт оценок и посещаемости;
+- валидация сериализаторов;
+- web-страницы и login-flow;
+- Swagger/OpenAPI schema и Swagger UI;
+- базовые security-настройки;
+- команда `seed_demo`.
