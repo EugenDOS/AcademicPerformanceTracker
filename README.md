@@ -6,6 +6,7 @@
 
 - роли пользователей: администратор, преподаватель, студент;
 - JWT-аутентификация для REST API;
+- Swagger/OpenAPI-документация;
 - модели групп, предметов, занятий, посещаемости и оценок;
 - API в формате JSON;
 - простые HTML-страницы по MVT: панель, группы, предметы, занятия, оценки, посещаемость;
@@ -46,6 +47,8 @@ $env:USE_SQLITE="1"
 
 - `POST /api/token/` - получить JWT access/refresh;
 - `POST /api/token/refresh/` - обновить access token;
+- `GET /api/schema/` - OpenAPI-схема;
+- `GET /api/docs/` - Swagger UI;
 - `GET /api/me/` - текущий пользователь;
 - `/api/users/`
 - `/api/groups/`
