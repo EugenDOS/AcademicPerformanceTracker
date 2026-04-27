@@ -1,6 +1,6 @@
 from django.db.models import Q
 
-from .models import Attendance, Grade, Lesson, StudyGroup, Subject, User
+from .models import Attendance, Grade, Lesson, Notification, StudyGroup, Subject, User
 
 
 def is_admin(user):
@@ -71,3 +71,9 @@ def visible_grades(user):
     if is_student(user):
         return Grade.objects.filter(student=user)
     return Grade.objects.none()
+
+
+def visible_notifications(user):
+    if not user.is_authenticated:
+        return Notification.objects.none()
+    return Notification.objects.filter(user=user)

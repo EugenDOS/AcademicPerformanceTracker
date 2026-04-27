@@ -9,27 +9,35 @@
 <section class="stats">
     <div class="stat">
         <span>Группы</span>
-        <strong>{{ group_count }}</strong>
+        <strong>{{ groups }}</strong>
     </div>
     <div class="stat">
         <span>Предметы</span>
-        <strong>{{ subject_count }}</strong>
+        <strong>{{ subjects }}</strong>
     </div>
     <div class="stat">
         <span>Занятия</span>
-        <strong>{{ lesson_count }}</strong>
+        <strong>{{ lessons }}</strong>
     </div>
     <div class="stat">
         <span>Оценки</span>
-        <strong>{{ grade_count }}</strong>
+        <strong>{{ grades }}</strong>
     </div>
     <div class="stat">
         <span>Записи посещаемости</span>
-        <strong>{{ attendance_count }}</strong>
+        <strong>{{ attendance_records }}</strong>
     </div>
     <div class="stat">
         <span>Средняя оценка</span>
         <strong>{% if average_grade %}{{ average_grade|floatformat:2 }}{% else %}-{% endif %}</strong>
+    </div>
+    <div class="stat">
+        <span>Пропуски</span>
+        <strong>{{ absences }}</strong>
+    </div>
+    <div class="stat">
+        <span>Новые уведомления</span>
+        <strong>{{ unread_notifications }}</strong>
     </div>
 </section>
 
@@ -50,6 +58,10 @@
             <tr><td>Занятия</td><td><code>/api/lessons/</code></td></tr>
             <tr><td>Оценки</td><td><code>/api/grades/</code></td></tr>
             <tr><td>Посещаемость</td><td><code>/api/attendance/</code></td></tr>
+            <tr><td>Уведомления</td><td><code>/api/notifications/</code></td></tr>
+            <tr><td>Аналитика</td><td><code>/api/stats/</code></td></tr>
+            <tr><td>Экспорт оценок</td><td><code>/api/export/grades.csv</code></td></tr>
+            <tr><td>Экспорт посещаемости</td><td><code>/api/export/attendance.csv</code></td></tr>
         </tbody>
     </table>
 </div>

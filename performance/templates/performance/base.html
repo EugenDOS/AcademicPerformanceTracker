@@ -72,7 +72,7 @@
             text-decoration: none;
         }
 
-        main {
+main {
             max-width: 1180px;
             margin: 0 auto;
             padding: 28px 20px;
@@ -91,6 +91,20 @@
 
         .muted {
             color: #5f6b7a;
+        }
+
+        .messages {
+            margin: 0 0 16px;
+            padding: 0;
+            list-style: none;
+        }
+
+        .messages li {
+            border: 1px solid #b9d9cb;
+            border-radius: 6px;
+            background: #edf8f2;
+            margin-bottom: 8px;
+            padding: 9px 12px;
         }
 
         .stats {
@@ -213,6 +227,9 @@
                 <a href="{% url 'lessons' %}">Занятия</a>
                 <a href="{% url 'grades' %}">Оценки</a>
                 <a href="{% url 'attendance' %}">Посещаемость</a>
+                <a href="{% url 'analytics' %}">Аналитика</a>
+                <a href="{% url 'notifications' %}">Уведомления</a>
+                <a href="{% url 'profile' %}">Профиль</a>
                 <a href="{% url 'api-root' %}">API</a>
                 {% if user.is_staff %}
                     <a href="{% url 'admin:index' %}">Админка</a>
@@ -226,6 +243,13 @@
     </div>
 </header>
 <main>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
     {% block content %}{% endblock %}
 </main>
 </body>

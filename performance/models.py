@@ -189,3 +189,24 @@ class Grade(models.Model):
 
     def __str__(self):
         return f"{self.student} - {self.subject}: {self.value}"
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name="пользователь",
+        related_name="notifications",
+        on_delete=models.CASCADE,
+    )
+    title = models.CharField("заголовок", max_length=150)
+    message = models.TextField("сообщение")
+    is_read = models.BooleanField("прочитано", default=False)
+    created_at = models.DateTimeField("создано", auto_now_add=True)
+
+    class Meta:
+        verbose_name = "уведомление"
+        verbose_name_plural = "уведомления"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.user}: {self.title}"

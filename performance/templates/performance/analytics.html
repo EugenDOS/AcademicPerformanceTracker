@@ -1,0 +1,99 @@
+{% extends "performance/base.html" %}
+
+{% block title %}Аналитика{% endblock %}
+
+{% block content %}
+<h1>Аналитика</h1>
+
+<section class="stats">
+    <div class="stat">
+        <span>Средняя оценка</span>
+        <strong>{% if summary.average_grade %}{{ summary.average_grade|floatformat:2 }}{% else %}-{% endif %}</strong>
+    </div>
+    <div class="stat">
+        <span>Пропуски</span>
+        <strong>{{ summary.absences }}</strong>
+    </div>
+    <div class="stat">
+        <span>Проблемные студенты</span>
+        <strong>{{ problem_students|length }}</strong>
+    </div>
+</section>
+
+<p>
+    <a href="{% url 'export-grades' %}">Экспорт оценок CSV</a> ·
+    <a href="{% url 'export-attendance' %}">Экспорт посещаемости CSV</a>
+</p>
+
+<h2>Средние оценки по предметам</h2>
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Предмет</th>
+                <th>Количество оценок</th>
+                <th>Средняя оценка</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in subject_averages %}
+                <tr>
+                    <td>{{ item.subject__name }}</td>
+                    <td>{{ item.count }}</td>
+                    <td>{{ item.average|floatformat:2 }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="3">Нет данных</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<h2>Посещаемость по статусам</h2>
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Статус</th>
+                <th>Количество</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in attendance_by_status %}
+                <tr>
+                    <td>{{ item.status }}</td>
+                    <td>{{ item.count }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="2">Нет данных</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<h2>Студенты, которым нужно внимание</h2>
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Студент</th>
+                <th>Группа</th>
+                <th>Средняя оценка</th>
+                <th>Пропуски</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in problem_students %}
+                <tr>
+                    <td>{{ student.full_name|default:student.username }}</td>
+                    <td>{{ student.group|default:"-" }}</td>
+                    <td>{% if student.average_grade %}{{ student.average_grade|floatformat:2 }}{% else %}-{% endif %}</td>
+                    <td>{{ student.absences }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="4">Нет проблемных студентов</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

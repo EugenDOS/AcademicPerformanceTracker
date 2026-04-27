@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 
-from .models import Attendance, Grade, Lesson, StudyGroup, Subject, User
+from .models import Attendance, Grade, Lesson, Notification, StudyGroup, Subject, User
 
 
 @admin.register(User)
@@ -48,3 +48,10 @@ class GradeAdmin(admin.ModelAdmin):
     list_display = ("date", "student", "subject", "teacher", "value", "comment")
     list_filter = ("value", "date", "subject", "teacher")
     search_fields = ("student__username", "student__last_name", "comment")
+
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ("created_at", "user", "title", "is_read")
+    list_filter = ("is_read", "created_at")
+    search_fields = ("user__username", "title", "message")

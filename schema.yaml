@@ -1,0 +1,1889 @@
+openapi: 3.0.3
+info:
+  title: Academic Performance Tracker API
+  version: 1.0.0
+  description: API для учета успеваемости и посещаемости студентов.
+paths:
+  /api/attendance/:
+    get:
+      operationId: attendance_list
+      summary: Список записей посещаемости
+      tags:
+      - Посещаемость
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Attendance'
+          description: ''
+    post:
+      operationId: attendance_create
+      summary: Создать запись посещаемости
+      tags:
+      - Посещаемость
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttendanceRequest'
+            examples:
+              Пример:
+                value:
+                  lesson: 1
+                  student: 3
+                  status: present
+                  comment: ''
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AttendanceRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AttendanceRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attendance'
+          description: ''
+  /api/attendance/{id}/:
+    get:
+      operationId: attendance_retrieve
+      summary: Запись посещаемости по ID
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this посещаемость.
+        required: true
+      tags:
+      - Посещаемость
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attendance'
+          description: ''
+    put:
+      operationId: attendance_update
+      summary: Обновить запись посещаемости
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this посещаемость.
+        required: true
+      tags:
+      - Посещаемость
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttendanceRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AttendanceRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AttendanceRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attendance'
+          description: ''
+    patch:
+      operationId: attendance_partial_update
+      summary: Частично обновить запись посещаемости
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this посещаемость.
+        required: true
+      tags:
+      - Посещаемость
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAttendanceRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAttendanceRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAttendanceRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attendance'
+          description: ''
+    delete:
+      operationId: attendance_destroy
+      summary: Удалить запись посещаемости
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this посещаемость.
+        required: true
+      tags:
+      - Посещаемость
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/export/attendance.csv:
+    get:
+      operationId: export_attendance.csv_retrieve
+      summary: Экспорт посещаемости в CSV
+      tags:
+      - Экспорт
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+          description: ''
+  /api/export/grades.csv:
+    get:
+      operationId: export_grades.csv_retrieve
+      summary: Экспорт оценок в CSV
+      tags:
+      - Экспорт
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+          description: ''
+  /api/grades/:
+    get:
+      operationId: grades_list
+      summary: Список оценок
+      tags:
+      - Оценки
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Grade'
+          description: ''
+    post:
+      operationId: grades_create
+      summary: Создать оценку
+      tags:
+      - Оценки
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GradeRequest'
+            examples:
+              Пример:
+                value:
+                  student: 3
+                  subject: 1
+                  lesson: 1
+                  value: 5
+                  date: '2026-04-27'
+                  comment: Работа на занятии
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GradeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GradeRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Grade'
+          description: ''
+  /api/grades/{id}/:
+    get:
+      operationId: grades_retrieve
+      summary: Оценка по ID
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this оценка.
+        required: true
+      tags:
+      - Оценки
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Grade'
+          description: ''
+    put:
+      operationId: grades_update
+      summary: Обновить оценку
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this оценка.
+        required: true
+      tags:
+      - Оценки
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GradeRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GradeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GradeRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Grade'
+          description: ''
+    patch:
+      operationId: grades_partial_update
+      summary: Частично обновить оценку
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this оценка.
+        required: true
+      tags:
+      - Оценки
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedGradeRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedGradeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedGradeRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Grade'
+          description: ''
+    delete:
+      operationId: grades_destroy
+      summary: Удалить оценку
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this оценка.
+        required: true
+      tags:
+      - Оценки
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/groups/:
+    get:
+      operationId: groups_list
+      summary: Список учебных групп
+      tags:
+      - Группы
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudyGroup'
+          description: ''
+    post:
+      operationId: groups_create
+      summary: Создать учебную группу
+      tags:
+      - Группы
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudyGroupRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudyGroupRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StudyGroupRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudyGroup'
+          description: ''
+  /api/groups/{id}/:
+    get:
+      operationId: groups_retrieve
+      summary: Учебная группа по ID
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this учебная группа.
+        required: true
+      tags:
+      - Группы
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudyGroup'
+          description: ''
+    put:
+      operationId: groups_update
+      summary: Обновить учебную группу
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this учебная группа.
+        required: true
+      tags:
+      - Группы
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudyGroupRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudyGroupRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StudyGroupRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudyGroup'
+          description: ''
+    patch:
+      operationId: groups_partial_update
+      summary: Частично обновить учебную группу
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this учебная группа.
+        required: true
+      tags:
+      - Группы
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedStudyGroupRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedStudyGroupRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedStudyGroupRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudyGroup'
+          description: ''
+    delete:
+      operationId: groups_destroy
+      summary: Удалить учебную группу
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this учебная группа.
+        required: true
+      tags:
+      - Группы
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/lessons/:
+    get:
+      operationId: lessons_list
+      summary: Список занятий
+      tags:
+      - Занятия
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Lesson'
+          description: ''
+    post:
+      operationId: lessons_create
+      summary: Создать занятие
+      tags:
+      - Занятия
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LessonRequest'
+            examples:
+              Пример:
+                value:
+                  group: 1
+                  subject: 1
+                  date: '2026-04-27'
+                  topic: Практическое занятие
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LessonRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LessonRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lesson'
+          description: ''
+  /api/lessons/{id}/:
+    get:
+      operationId: lessons_retrieve
+      summary: Занятие по ID
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this занятие.
+        required: true
+      tags:
+      - Занятия
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lesson'
+          description: ''
+    put:
+      operationId: lessons_update
+      summary: Обновить занятие
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this занятие.
+        required: true
+      tags:
+      - Занятия
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LessonRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LessonRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LessonRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lesson'
+          description: ''
+    patch:
+      operationId: lessons_partial_update
+      summary: Частично обновить занятие
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this занятие.
+        required: true
+      tags:
+      - Занятия
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLessonRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLessonRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLessonRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lesson'
+          description: ''
+    delete:
+      operationId: lessons_destroy
+      summary: Удалить занятие
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this занятие.
+        required: true
+      tags:
+      - Занятия
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/me/:
+    get:
+      operationId: me_retrieve
+      summary: Текущий пользователь
+      tags:
+      - Профиль
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+  /api/notifications/:
+    get:
+      operationId: notifications_list
+      summary: Список уведомлений текущего пользователя
+      tags:
+      - Уведомления
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+          description: ''
+  /api/notifications/{id}/:
+    get:
+      operationId: notifications_retrieve
+      summary: Уведомление по ID
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this уведомление.
+        required: true
+      tags:
+      - Уведомления
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+  /api/notifications/{id}/mark_read/:
+    post:
+      operationId: notifications_mark_read_create
+      summary: Отметить уведомление прочитанным
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this уведомление.
+        required: true
+      tags:
+      - Уведомления
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NotificationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NotificationRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+  /api/password/change/:
+    post:
+      operationId: password_change_create
+      summary: Сменить пароль текущего пользователя
+      tags:
+      - Профиль
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordChangeRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordChangeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordChangeRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: Пароль изменен
+  /api/profile/:
+    patch:
+      operationId: profile_partial_update
+      summary: Обновить профиль текущего пользователя
+      tags:
+      - Профиль
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProfileRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProfileRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProfileRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+  /api/stats/:
+    get:
+      operationId: stats_retrieve
+      summary: Сводная аналитика
+      tags:
+      - Аналитика
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/subjects/:
+    get:
+      operationId: subjects_list
+      summary: Список предметов
+      tags:
+      - Предметы
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subject'
+          description: ''
+    post:
+      operationId: subjects_create
+      summary: Создать предмет
+      tags:
+      - Предметы
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubjectRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubjectRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subject'
+          description: ''
+  /api/subjects/{id}/:
+    get:
+      operationId: subjects_retrieve
+      summary: Предмет по ID
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this предмет.
+        required: true
+      tags:
+      - Предметы
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subject'
+          description: ''
+    put:
+      operationId: subjects_update
+      summary: Обновить предмет
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this предмет.
+        required: true
+      tags:
+      - Предметы
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubjectRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubjectRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subject'
+          description: ''
+    patch:
+      operationId: subjects_partial_update
+      summary: Частично обновить предмет
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this предмет.
+        required: true
+      tags:
+      - Предметы
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSubjectRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSubjectRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSubjectRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subject'
+          description: ''
+    delete:
+      operationId: subjects_destroy
+      summary: Удалить предмет
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this предмет.
+        required: true
+      tags:
+      - Предметы
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/token/:
+    post:
+      operationId: token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/token/refresh/:
+    post:
+      operationId: token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/users/:
+    get:
+      operationId: users_list
+      summary: Список пользователей
+      tags:
+      - Пользователи
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: ''
+    post:
+      operationId: users_create
+      summary: Создать пользователя
+      tags:
+      - Пользователи
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/users/{id}/:
+    get:
+      operationId: users_retrieve
+      summary: Пользователь по ID
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this пользователь.
+        required: true
+      tags:
+      - Пользователи
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: users_update
+      summary: Обновить пользователя
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this пользователь.
+        required: true
+      tags:
+      - Пользователи
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: users_partial_update
+      summary: Частично обновить пользователя
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this пользователь.
+        required: true
+      tags:
+      - Пользователи
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: users_destroy
+      summary: Удалить пользователя
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this пользователь.
+        required: true
+      tags:
+      - Пользователи
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    Attendance:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        lesson:
+          type: integer
+          title: Занятие
+        lesson_name:
+          type: string
+          readOnly: true
+        student:
+          type: integer
+          title: Студент
+        student_name:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          title: Статус
+        status_text:
+          type: string
+          readOnly: true
+        comment:
+          type: string
+          title: Комментарий
+          maxLength: 200
+      required:
+      - id
+      - lesson
+      - lesson_name
+      - status_text
+      - student
+      - student_name
+    AttendanceRequest:
+      type: object
+      properties:
+        lesson:
+          type: integer
+          title: Занятие
+        student:
+          type: integer
+          title: Студент
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          title: Статус
+        comment:
+          type: string
+          title: Комментарий
+          maxLength: 200
+      required:
+      - lesson
+      - student
+    Grade:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student:
+          type: integer
+          title: Студент
+        student_name:
+          type: string
+          readOnly: true
+        subject:
+          type: integer
+          title: Предмет
+        subject_name:
+          type: string
+          readOnly: true
+        teacher:
+          type: integer
+          title: Преподаватель
+        teacher_name:
+          type: string
+          readOnly: true
+        lesson:
+          type: integer
+          nullable: true
+          title: Занятие
+        lesson_name:
+          type: string
+          readOnly: true
+        value:
+          type: integer
+          maximum: 5
+          minimum: 2
+          title: Оценка
+        date:
+          type: string
+          format: date
+          title: Дата
+        comment:
+          type: string
+          title: Комментарий
+          maxLength: 200
+      required:
+      - date
+      - id
+      - lesson_name
+      - student
+      - student_name
+      - subject
+      - subject_name
+      - teacher_name
+      - value
+    GradeRequest:
+      type: object
+      properties:
+        student:
+          type: integer
+          title: Студент
+        subject:
+          type: integer
+          title: Предмет
+        teacher:
+          type: integer
+          title: Преподаватель
+        lesson:
+          type: integer
+          nullable: true
+          title: Занятие
+        value:
+          type: integer
+          maximum: 5
+          minimum: 2
+          title: Оценка
+        date:
+          type: string
+          format: date
+          title: Дата
+        comment:
+          type: string
+          title: Комментарий
+          maxLength: 200
+      required:
+      - date
+      - student
+      - subject
+      - value
+    Lesson:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        group:
+          type: integer
+          title: Группа
+        group_name:
+          type: string
+          readOnly: true
+        subject:
+          type: integer
+          title: Предмет
+        subject_name:
+          type: string
+          readOnly: true
+        teacher:
+          type: integer
+          title: Преподаватель
+        teacher_name:
+          type: string
+          readOnly: true
+        date:
+          type: string
+          format: date
+          title: Дата
+        topic:
+          type: string
+          title: Тема занятия
+          maxLength: 200
+      required:
+      - date
+      - group
+      - group_name
+      - id
+      - subject
+      - subject_name
+      - teacher_name
+      - topic
+    LessonRequest:
+      type: object
+      properties:
+        group:
+          type: integer
+          title: Группа
+        subject:
+          type: integer
+          title: Предмет
+        teacher:
+          type: integer
+          title: Преподаватель
+        date:
+          type: string
+          format: date
+          title: Дата
+        topic:
+          type: string
+          minLength: 1
+          title: Тема занятия
+          maxLength: 200
+      required:
+      - date
+      - group
+      - subject
+      - topic
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          title: Заголовок
+          maxLength: 150
+        message:
+          type: string
+          title: Сообщение
+        is_read:
+          type: boolean
+          title: Прочитано
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Создано
+      required:
+      - created_at
+      - id
+      - message
+      - title
+    NotificationRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          title: Заголовок
+          maxLength: 150
+        message:
+          type: string
+          minLength: 1
+          title: Сообщение
+        is_read:
+          type: boolean
+          title: Прочитано
+      required:
+      - message
+      - title
+    PasswordChangeRequest:
+      type: object
+      properties:
+        old_password:
+          type: string
+          writeOnly: true
+          minLength: 1
+        new_password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - new_password
+      - old_password
+    PatchedAttendanceRequest:
+      type: object
+      properties:
+        lesson:
+          type: integer
+          title: Занятие
+        student:
+          type: integer
+          title: Студент
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          title: Статус
+        comment:
+          type: string
+          title: Комментарий
+          maxLength: 200
+    PatchedGradeRequest:
+      type: object
+      properties:
+        student:
+          type: integer
+          title: Студент
+        subject:
+          type: integer
+          title: Предмет
+        teacher:
+          type: integer
+          title: Преподаватель
+        lesson:
+          type: integer
+          nullable: true
+          title: Занятие
+        value:
+          type: integer
+          maximum: 5
+          minimum: 2
+          title: Оценка
+        date:
+          type: string
+          format: date
+          title: Дата
+        comment:
+          type: string
+          title: Комментарий
+          maxLength: 200
+    PatchedLessonRequest:
+      type: object
+      properties:
+        group:
+          type: integer
+          title: Группа
+        subject:
+          type: integer
+          title: Предмет
+        teacher:
+          type: integer
+          title: Преподаватель
+        date:
+          type: string
+          format: date
+          title: Дата
+        topic:
+          type: string
+          minLength: 1
+          title: Тема занятия
+          maxLength: 200
+    PatchedProfileRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Адрес электронной почты
+          maxLength: 254
+    PatchedStudyGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Название
+          maxLength: 100
+        curator:
+          type: integer
+          nullable: true
+          title: Куратор
+    PatchedSubjectRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Название
+          maxLength: 120
+        description:
+          type: string
+          title: Описание
+        teachers:
+          type: array
+          items:
+            type: integer
+            title: Преподаватели
+          title: Преподаватели
+    PatchedUserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          title: Имя пользователя
+          description: Обязательное поле. Не более 150 символов. Только буквы, цифры
+            и символы @/./+/-/_.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Адрес электронной почты
+          maxLength: 254
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          title: Роль
+        group:
+          type: integer
+          nullable: true
+          title: Учебная группа
+    Profile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+          title: Имя пользователя
+          description: Обязательное поле. Не более 150 символов. Только буквы, цифры
+            и символы @/./+/-/_.
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Адрес электронной почты
+          maxLength: 254
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          readOnly: true
+          title: Роль
+        group:
+          type: integer
+          readOnly: true
+          nullable: true
+          title: Учебная группа
+        group_name:
+          type: string
+          readOnly: true
+      required:
+      - group
+      - group_name
+      - id
+      - role
+      - username
+    RoleEnum:
+      enum:
+      - admin
+      - teacher
+      - student
+      type: string
+      description: |-
+        * `admin` - Администратор
+        * `teacher` - Преподаватель
+        * `student` - Студент
+    StatusEnum:
+      enum:
+      - present
+      - absent
+      - late
+      - excused
+      type: string
+      description: |-
+        * `present` - Присутствовал
+        * `absent` - Отсутствовал
+        * `late` - Опоздал
+        * `excused` - Уважительная причина
+    StudyGroup:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Название
+          maxLength: 100
+        curator:
+          type: integer
+          nullable: true
+          title: Куратор
+        curator_name:
+          type: string
+          readOnly: true
+      required:
+      - curator_name
+      - id
+      - name
+    StudyGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Название
+          maxLength: 100
+        curator:
+          type: integer
+          nullable: true
+          title: Куратор
+      required:
+      - name
+    Subject:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Название
+          maxLength: 120
+        description:
+          type: string
+          title: Описание
+        teachers:
+          type: array
+          items:
+            type: integer
+            title: Преподаватели
+          title: Преподаватели
+        teacher_names:
+          type: array
+          items:
+            type: string
+          readOnly: true
+      required:
+      - id
+      - name
+      - teacher_names
+    SubjectRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Название
+          maxLength: 120
+        description:
+          type: string
+          title: Описание
+        teachers:
+          type: array
+          items:
+            type: integer
+            title: Преподаватели
+          title: Преподаватели
+      required:
+      - name
+    TokenObtainPair:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - refresh
+    TokenObtainPairRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - password
+      - username
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+      required:
+      - access
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - refresh
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          title: Имя пользователя
+          description: Обязательное поле. Не более 150 символов. Только буквы, цифры
+            и символы @/./+/-/_.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Адрес электронной почты
+          maxLength: 254
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          title: Роль
+        group:
+          type: integer
+          nullable: true
+          title: Учебная группа
+      required:
+      - id
+      - username
+    UserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          title: Имя пользователя
+          description: Обязательное поле. Не более 150 символов. Только буквы, цифры
+            и символы @/./+/-/_.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Адрес электронной почты
+          maxLength: 254
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          title: Роль
+        group:
+          type: integer
+          nullable: true
+          title: Учебная группа
+      required:
+      - username
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,7 +1,7 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, password_validation
 from rest_framework import serializers
 
-from .models import Attendance, Grade, Lesson, StudyGroup, Subject, User
+from .models import Attendance, Grade, Lesson, Notification, StudyGroup, Subject, User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -38,6 +38,36 @@ class UserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    group_name = serializers.StringRelatedField(source="group", read_only=True)
+
+    class Meta:
+        model = get_user_model()
+        fields = ("id", "username", "first_name", "last_name", "email", "role", "group", "group_name")
+        read_only_fields = ("id", "username", "role", "group", "group_name")
+
+
+class PasswordChangeSerializer(serializers.Serializer):
+    old_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True)
+
+    def validate_old_password(self, value):
+        user = self.context["request"].user
+        if not user.check_password(value):
+            raise serializers.ValidationError("Старый пароль указан неверно.")
+        return value
+
+    def validate_new_password(self, value):
+        password_validation.validate_password(value, self.context["request"].user)
+        return value
+
+    def save(self, **kwargs):
+        user = self.context["request"].user
+        user.set_password(self.validated_data["new_password"])
+        user.save(update_fields=["password"])
+        return user
 
 
 class StudyGroupSerializer(serializers.ModelSerializer):
@@ -156,3 +186,10 @@ class GradeSerializer(serializers.ModelSerializer):
         if lesson and student and lesson.group_id != student.group_id:
             raise serializers.ValidationError("Студент должен относиться к группе занятия.")
         return attrs
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ("id", "title", "message", "is_read", "created_at")
+        read_only_fields = ("id", "created_at")
