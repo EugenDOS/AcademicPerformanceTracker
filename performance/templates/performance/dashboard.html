@@ -1,0 +1,56 @@
+{% extends "performance/base.html" %}
+
+{% block title %}Панель{% endblock %}
+
+{% block content %}
+<h1>Панель</h1>
+<p class="muted">{{ user.get_full_name|default:user.username }} · {{ user.get_role_display }}</p>
+
+<section class="stats">
+    <div class="stat">
+        <span>Группы</span>
+        <strong>{{ group_count }}</strong>
+    </div>
+    <div class="stat">
+        <span>Предметы</span>
+        <strong>{{ subject_count }}</strong>
+    </div>
+    <div class="stat">
+        <span>Занятия</span>
+        <strong>{{ lesson_count }}</strong>
+    </div>
+    <div class="stat">
+        <span>Оценки</span>
+        <strong>{{ grade_count }}</strong>
+    </div>
+    <div class="stat">
+        <span>Записи посещаемости</span>
+        <strong>{{ attendance_count }}</strong>
+    </div>
+    <div class="stat">
+        <span>Средняя оценка</span>
+        <strong>{% if average_grade %}{{ average_grade|floatformat:2 }}{% else %}-{% endif %}</strong>
+    </div>
+</section>
+
+<h2>REST API</h2>
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Раздел</th>
+                <th>Адрес</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>JWT token</td><td><code>/api/token/</code></td></tr>
+            <tr><td>Пользователь</td><td><code>/api/me/</code></td></tr>
+            <tr><td>Группы</td><td><code>/api/groups/</code></td></tr>
+            <tr><td>Предметы</td><td><code>/api/subjects/</code></td></tr>
+            <tr><td>Занятия</td><td><code>/api/lessons/</code></td></tr>
+            <tr><td>Оценки</td><td><code>/api/grades/</code></td></tr>
+            <tr><td>Посещаемость</td><td><code>/api/attendance/</code></td></tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

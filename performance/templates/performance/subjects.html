@@ -1,0 +1,38 @@
+{% extends "performance/base.html" %}
+
+{% block title %}Предметы{% endblock %}
+
+{% block content %}
+<h1>Предметы</h1>
+
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Преподаватели</th>
+                <th>Описание</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subject in subjects %}
+                <tr>
+                    <td>{{ subject.id }}</td>
+                    <td>{{ subject.name }}</td>
+                    <td>
+                        {% for teacher in subject.teachers.all %}
+                            {{ teacher }}{% if not forloop.last %}, {% endif %}
+                        {% empty %}
+                            -
+                        {% endfor %}
+                    </td>
+                    <td>{{ subject.description|default:"-" }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="4">Нет данных</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

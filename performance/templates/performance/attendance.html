@@ -1,0 +1,36 @@
+{% extends "performance/base.html" %}
+
+{% block title %}Посещаемость{% endblock %}
+
+{% block content %}
+<h1>Посещаемость</h1>
+
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Группа</th>
+                <th>Предмет</th>
+                <th>Студент</th>
+                <th>Статус</th>
+                <th>Комментарий</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in attendance %}
+                <tr>
+                    <td>{{ item.lesson.date }}</td>
+                    <td>{{ item.lesson.group }}</td>
+                    <td>{{ item.lesson.subject }}</td>
+                    <td>{{ item.student }}</td>
+                    <td>{{ item.get_status_display }}</td>
+                    <td>{{ item.comment|default:"-" }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="6">Нет данных</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "performance/base.html" %}
+
+{% block title %}Группы{% endblock %}
+
+{% block content %}
+<h1>Группы</h1>
+
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Куратор</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for group in groups %}
+                <tr>
+                    <td>{{ group.id }}</td>
+                    <td>{{ group.name }}</td>
+                    <td>{{ group.curator|default:"-" }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="3">Нет данных</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

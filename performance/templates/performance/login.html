@@ -1,0 +1,19 @@
+{% extends "performance/base.html" %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+<h1>Вход</h1>
+
+<form class="login-box" method="post">
+    {% csrf_token %}
+    {% if form.errors %}
+        <p class="muted">Неверный логин или пароль.</p>
+    {% endif %}
+    <label for="{{ form.username.id_for_label }}">Логин</label>
+    {{ form.username }}
+    <label for="{{ form.password.id_for_label }}">Пароль</label>
+    {{ form.password }}
+    <button class="primary" type="submit">Войти</button>
+</form>
+{% endblock %}

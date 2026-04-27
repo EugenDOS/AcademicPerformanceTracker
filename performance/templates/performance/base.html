@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Успеваемость{% endblock %}</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f5f7fb;
+            color: #20232a;
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        a {
+            color: #1769aa;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid #dde3ec;
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 14px 20px;
+        }
+
+        .brand {
+            color: #111827;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav a,
+        nav button {
+            border: 1px solid #cfd8e3;
+            border-radius: 6px;
+            background: #ffffff;
+            color: #20232a;
+            cursor: pointer;
+            font: inherit;
+            padding: 7px 10px;
+        }
+
+        nav a:hover,
+        nav button:hover {
+            background: #edf6f3;
+            text-decoration: none;
+        }
+
+        main {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 28px 20px;
+        }
+
+        h1 {
+            margin: 0 0 18px;
+            font-size: 26px;
+            line-height: 1.2;
+        }
+
+        h2 {
+            margin: 26px 0 12px;
+            font-size: 19px;
+        }
+
+        .muted {
+            color: #5f6b7a;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat {
+            min-height: 86px;
+            border: 1px solid #dde3ec;
+            border-radius: 8px;
+            background: #ffffff;
+            padding: 14px;
+        }
+
+        .stat strong {
+            display: block;
+            color: #1769aa;
+            font-size: 25px;
+            line-height: 1.2;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border: 1px solid #dde3ec;
+            border-radius: 8px;
+            background: #ffffff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 720px;
+        }
+
+        th,
+        td {
+            border-bottom: 1px solid #e8edf3;
+            padding: 10px 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background: #edf2f7;
+            color: #374151;
+            font-weight: 700;
+        }
+
+        tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .login-box {
+            max-width: 360px;
+            border: 1px solid #dde3ec;
+            border-radius: 8px;
+            background: #ffffff;
+            padding: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 4px;
+            font-weight: 700;
+        }
+
+        input {
+            width: 100%;
+            border: 1px solid #cfd8e3;
+            border-radius: 6px;
+            font: inherit;
+            padding: 9px 10px;
+        }
+
+        .primary {
+            width: 100%;
+            border: 0;
+            border-radius: 6px;
+            background: #1f8a70;
+            color: #ffffff;
+            cursor: pointer;
+            font: inherit;
+            margin-top: 16px;
+            padding: 10px 12px;
+        }
+
+        .primary:hover {
+            background: #176b57;
+        }
+
+        @media (max-width: 760px) {
+            .header-inner {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            nav {
+                width: 100%;
+            }
+
+            nav a,
+            nav button {
+                flex: 1 1 auto;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-inner">
+        <a class="brand" href="{% url 'dashboard' %}">Успеваемость</a>
+        {% if user.is_authenticated %}
+            <nav>
+                <a href="{% url 'groups' %}">Группы</a>
+                <a href="{% url 'subjects' %}">Предметы</a>
+                <a href="{% url 'lessons' %}">Занятия</a>
+                <a href="{% url 'grades' %}">Оценки</a>
+                <a href="{% url 'attendance' %}">Посещаемость</a>
+                <a href="{% url 'api-root' %}">API</a>
+                {% if user.is_staff %}
+                    <a href="{% url 'admin:index' %}">Админка</a>
+                {% endif %}
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit">Выйти</button>
+                </form>
+            </nav>
+        {% endif %}
+    </div>
+</header>
+<main>
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>
