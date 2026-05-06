@@ -144,11 +144,14 @@ class RoleApiTests(TestDataMixin, TestCase):
 
         grades_response = self.api.get("/api/grades/")
         attendance_response = self.api.get("/api/attendance/")
+        lessons_response = self.api.get("/api/lessons/")
 
         self.assertEqual(grades_response.status_code, 200)
         self.assertEqual({item["student"] for item in grades_response.data}, {self.student.id})
         self.assertEqual(attendance_response.status_code, 200)
         self.assertEqual({item["student"] for item in attendance_response.data}, {self.student.id})
+        self.assertEqual(lessons_response.status_code, 200)
+        self.assertEqual({item["group"] for item in lessons_response.data}, {self.group.id})
 
     def test_student_cannot_write_grade_attendance_or_group(self):
         self.api.force_authenticate(self.student)
